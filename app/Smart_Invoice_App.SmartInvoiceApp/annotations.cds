@@ -31,12 +31,12 @@ annotate service.Headers with @(
             $Type : 'UI.DataField',
             Label : 'currency',
             Value : currency,
-        },
+        },/*
         {
             $Type : 'UI.DataFieldForAction',
-            Action : 'Smart_Invoice_AppService.EntityContainer/submitInvoice',
-            Label : 'submitInvoice',
-        },
+            Action : '.extension.SmartInvoiceApp.SmartInvoiceApp.ext.controller.ListReportExt.onCreateInvoice',
+            Label : 'createInvoice',
+        },*/
     ]
 );
 annotate service.Headers with @(

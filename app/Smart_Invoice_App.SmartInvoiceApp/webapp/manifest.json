@@ -96,7 +96,6 @@
       "css": []
     },
     "routing": {
-      "config": {},
       "routes": [
         {
           "pattern": ":?query:",
@@ -124,6 +123,18 @@
                     "route": "HeadersObjectPage"
                   }
                 }
+              },
+              "controlConfiguration": {
+                "@com.sap.vocabularies.UI.v1.LineItem": {
+                  "actions": {
+                    "createInvoice": {
+                      "press": ".extension.SmartInvoiceApp.SmartInvoiceApp.ext.controller.ListReportExt.onCreateInvoice",
+                    "enabled": true,
+                      "visible": true,
+                      "text": "Create Invoice"
+                    }
+                  }
+                }
               }
             }
           }
@@ -137,6 +148,15 @@
               "editableHeaderContent": false,
               "contextPath": "/Headers"
             }
+          }
+        }
+      }
+    },
+    "extends": {
+      "extensions": {
+        "sap.ui.controllerExtensions": {
+          "sap.fe.templates.ListReport.ListReportController": {
+            "controllerName": "SmartInvoiceApp.SmartInvoiceApp.ext.controller.ListReportExt"
           }
         }
       }

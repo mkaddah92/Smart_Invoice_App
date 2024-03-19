@@ -3,7 +3,6 @@ using { sia as my } from '../db/schema';
 @path : '/service/Smart_Invoice_AppSvcs'
 service Smart_Invoice_AppService
 {
-    //@odata.draft.enabled
     entity Headers as
         projection on my.Headers
         actions
@@ -18,7 +17,7 @@ service Smart_Invoice_AppService
     entity Items as
         projection on my.Items;
 
-    action submitInvoice
+    action createInvoice
     (
         file : String(100)
     )
