@@ -129,13 +129,14 @@
                   "actions": {
                     "createInvoice": {
                       "press": ".extension.SmartInvoiceApp.SmartInvoiceApp.ext.controller.ListReportExt.onCreateInvoice",
-                    "enabled": true,
+                      "enabled": true,
                       "visible": true,
                       "text": "Create Invoice"
                     }
                   }
                 }
-              }
+              },
+              "initialLoad": "Enabled"
             }
           }
         },

@@ -1,0 +1,12 @@
+{
+    "version": "2.0",
+    "codes": [],
+    "configuration": {
+        "phase": "after",
+        "events": [
+            "READ"
+        ],
+        "entity": "Smart_Invoice_AppService.Headers"
+    },
+    "hash": "c9b23d7e12d11020cdd24fb5e8d3350e5ae0d3f684e80ae60ac5aca2a7bc5ffc807fdb437abd7f4b36c386d24552f168caed171872a1e50fb9a210ca87a7ea30"
+}

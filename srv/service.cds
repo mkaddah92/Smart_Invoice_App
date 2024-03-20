@@ -7,11 +7,6 @@ service Smart_Invoice_AppService
         projection on my.Headers
         actions
         {
-            action uploadInvoice
-            (
-                file : String(100)
-            )
-            returns Headers;
         };
 
     entity Items as
