@@ -5,16 +5,26 @@ xmlns:l="sap.ui.layout" >
     <Dialog title="Create Invoice" id="idFragInvoiceCreate">
         <content>
             <VBox class="sapUiSmallMargin" id="formContainer">
-                <u:FileUploader
+                <!-- <u:FileUploader
                     id="fileUploader"
                     name="myFileUpload"
-                    uploadUrl="upload/"
                     tooltip="Upload your file to the local server"
                     uploadComplete="handleUploadComplete"/>
                 <Button
                     id="btnUploadInvoice"
                     text="Upload File"
-                    press="handleUploadPress"/>
+                    press="handleUploadPress"/> -->
+                <u:FileUploader 
+                    id="fileUploader" 
+                    buttonText="Import Invoice"
+                    icon="sap-icon://sap-sports/icon-upload" 
+                    tooltip="Upload your file to the local server" 
+                    change="onUploadInvoice" 
+                    multiple="false" 
+                    buttonOnly="false" 
+                    enabled="true" 
+                    class="sapUiTinyMarginBeginEnd" />
+
             </VBox>
         </content>
         
