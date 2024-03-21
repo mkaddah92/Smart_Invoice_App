@@ -9,37 +9,28 @@ sap.ui.define([
 
 	return ControllerExtension.extend('SmartInvoiceApp.SmartInvoiceApp.ext.controller.ListReportExt', {
 //https://github.tools.sap/sports/sports-one-ui/blob/06bdc44e3af17998d9fc924b44227bd4c82b89af/src/sap/sports/fnd/ui/uploadTeamMembers/view/Dialog.controller.js
-		_uploadData : function (oData) {
-			// const oExternalizedData = this._externalizeData(oData)
-			// const sUrl = '/sap/sports/fnd/appsvc/uploadTeamMembers/services/rest/uploadTeamMembers'
-			// jQuery.ajax({
-			// 	url: sUrl,
-			// 	type: 'POST',
-			// 	contentType: 'application/json; charset=UTF-8',
-			// 	data: JSON.stringify(oExternalizedData)
-			// }).done(this.runIfOwned(data => {
-			// // show success message
-			// 	const sSuccessMsg = this.i18nModel.getResourceBundle().getText('SUCCESS_MSG')
-			// 	MessageBox.success(sSuccessMsg)
-			// })).fail(function (jqXHR) {
-			// 	sap.ui.getCore().getEventBus().publish('ProSports', 'Error', jqXHR)
-			// })
+		_uploadData : function (payload) {
+
 			const that = this;
-            
-			let sActionName = "sapHubTrackerService.EntityContainer/createAppointment";
-			let mParameters = {};
-			let editFlow = this.base.getExtensionAPI().getEditFlow();
+            let editFlow = this.base.getExtensionAPI().getEditFlow();
+
+			let sActionName = "Smart_Invoice_AppService.EntityContainer/createInvoice";
+			let mParameters = {
+				parameterValues: [
+					{ name: "file", value: JSON.stringify(payload) }
+				],
+				context: editFlow.getView().getBindingContext(),
+				model: editFlow.getView().getModel(),
+				label: 'Confirm',
+				skipParameterDialog: true	
+			};
+			
 			editFlow.invokeAction(sActionName, mParameters)
 				.then(function(oResponse) {
 					that.base.getExtensionAPI().refresh();
 					that._oDialog.then(function(oDialog){
 						oDialog.close();
 					});
-					//MessageToast.show(that.getModel('i18n')._oResourceBundle.getText('createSuccessful'));
-					// that.base.editFlow.getInternalRouting()
-					// 	.navigateToRoute("AppointmentsDetailsPageDraft", {
-					// 		appointment: oResponse.value
-					// 	}, true);
 				})
 		},
 		onUploadInvoice: function(oEvent) {

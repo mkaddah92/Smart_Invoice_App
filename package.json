@@ -16,7 +16,8 @@
     "@sap/xssec": "^3.6.1",
     "express": "^4",
     "hdb": "^0.19.7",
-    "passport": "^0.7.0"
+    "passport": "^0.7.0",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@cap-js/sqlite": "^1",
@@ -44,6 +45,13 @@
         },
         "[production]": {
           "kind": "xsuaa"
+        }
+      },
+      "dox": {
+        "kind": "rest",
+        "credentials": {
+          "destination": "dox_api",
+          "requestTimeout": 1000000
         }
       }
     },
