@@ -147,7 +147,8 @@
           "options": {
             "settings": {
               "editableHeaderContent": false,
-              "contextPath": "/Headers"
+              "contextPath": "/Headers",
+              "navigation": {}
             }
           }
         }

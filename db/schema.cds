@@ -20,17 +20,35 @@ entity Headers : cuid
     dox_status : String(100);
     invoiceNumber : String(100);
     invoiceDate : Date;
-    supplierNumber : String(100);
+    amount : Decimal;
+    supplierName : String(100);
     currency : String(3);
+    description : String;
 }
 
 entity Items : cuid
-{   key header : Association to one Headers;
+{   
+    key header : Association to one Headers;
     ItemNum : String(100);
     flightNumber : String(100);
     flightDate : Date;
-    flightTime : Time;
+    flightTime : String;
     quantity : Decimal;
     amount : Decimal;
+    status : String(100);
+    poNumber : String(100);
+    poLineNumber : String(100);
     
+}
+entity PurchaseOrders : cuid
+{
+    supplierNumber : String(100);
+    poNumber : String(100);
+    poLineNumber : String(100);
+    flightNumber: String(5);
+    departureDate : Date;
+    departureTime : Time;
+    landingDate : Date;
+    landingTime : Time;
+
 }

@@ -28,7 +28,7 @@
                     return Controller.extend("PreviewController", {
                         onInit: function () {
 
-                            const data = {"Services":[{"ServiceName":"Smart_Invoice_AppService","DetailsURL":"./service/Smart_Invoice_AppSvcs/","Metadata":"./service/Smart_Invoice_AppSvcs/$metadata","Entities":[{"Name":"Headers","URL":"./service/Smart_Invoice_AppSvcs/Headers","FioriURL":"$fiori-preview/Smart_Invoice_AppService/Headers#preview-app"},{"Name":"Items","URL":"./service/Smart_Invoice_AppSvcs/Items","FioriURL":"$fiori-preview/Smart_Invoice_AppService/Items#preview-app"}],"EntitiesCount":2}]}
+                            const data = {"Services":[{"ServiceName":"Smart_Invoice_AppService","DetailsURL":"./service/Smart_Invoice_AppSvcs/","Metadata":"./service/Smart_Invoice_AppSvcs/$metadata","Entities":[{"Name":"Headers","URL":"./service/Smart_Invoice_AppSvcs/Headers","FioriURL":"$fiori-preview/Smart_Invoice_AppService/Headers#preview-app"},{"Name":"Items","URL":"./service/Smart_Invoice_AppSvcs/Items","FioriURL":"$fiori-preview/Smart_Invoice_AppService/Items#preview-app"},{"Name":"PurchaseOrders","URL":"./service/Smart_Invoice_AppSvcs/PurchaseOrders","FioriURL":"$fiori-preview/Smart_Invoice_AppService/PurchaseOrders#preview-app"}],"EntitiesCount":3}]}
                             this.getView().setModel(new JSONModel(data));
                         }
                     });

@@ -1,2 +1,2 @@
-ID;dox_guid;dox_status;invoiceNumber;invoiceDate;supplierNumber;currency
-7827ca71-d6ee-41e2-95d3-0a842f4cb6a2;19ee3561-0e65-4f33-abed-bdaf9e52bfee;PENDING;;;;
+ID;dox_guid;dox_status;invoiceNumber;invoiceDate;amount;supplierName;currency;description
+9119d27f-492b-4490-9bb6-9d302b74e623;b18194d8-efca-47d0-82af-1392e9ba2bb0;PENDING;;;;;;
