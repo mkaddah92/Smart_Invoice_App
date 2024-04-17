@@ -2,7 +2,7 @@
 const cds = require("@sap/cds");
 const generateUUID = require('@sap/cds-foss')('uuid');
 
-const{createInvoice, refreshJobs, startWorkflow} = require('./lib/handlers');
+const{createInvoice, refreshJobs} = require('./lib/handlers');
 
 module.exports = async (srv) => {
 
