@@ -7,6 +7,17 @@ service Smart_Invoice_AppService
         projection on my.Headers
         actions
         {
+            @(
+                cds.odata.bindingparameter.name  : '_it',
+                Common.SideEffects              : {
+                    TargetEntities: [
+                        _it
+                    ],
+                    SourceEntities: [
+                        _it
+                    ]
+                }
+            )
             action refreshJob
             (
             );

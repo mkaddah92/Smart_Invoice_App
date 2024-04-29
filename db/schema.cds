@@ -22,8 +22,11 @@ entity Headers : cuid
     invoiceDate : Date;
     amount : Decimal;
     supplierName : String(100);
+    supplierNumber : String(100);
     currency : String(3);
     description : String;
+    unit : String(5);
+    unitPrice : Decimal;
 }
 
 entity Items : cuid
@@ -35,7 +38,8 @@ entity Items : cuid
     flightTime : String;
     quantity : Decimal;
     amount : Decimal;
-    status : String(100);
+    matchingStatus : String(100);
+    workflowStatus : String(100);
     poNumber : String(100);
     poLineNumber : String(100);
     

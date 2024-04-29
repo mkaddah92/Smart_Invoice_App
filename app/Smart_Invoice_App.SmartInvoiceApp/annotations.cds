@@ -1,6 +1,10 @@
 using Smart_Invoice_AppService as service from '../../srv/service';
 
+
+
+
 annotate service.Headers with @(
+
     UI.LineItem : [
         {
             $Type : 'UI.DataFieldForAction',
@@ -11,42 +15,42 @@ annotate service.Headers with @(
         },
         {
             $Type : 'UI.DataField',
-            Value : dox_guid,
-            Label : 'dox_guid',
+            Value : ID,
+            Label : '{i18n>dox_guid}',
         },
         {
             $Type : 'UI.DataField',
-            Label : 'dox_status',
+            Label : '{i18n>dox_status}',
             Value : dox_status,
         },
         {
             $Type : 'UI.DataField',
             Value : supplierName,
-            Label : 'supplierName',
+            Label : '{i18n>supplierName}',
         },
         {
             $Type : 'UI.DataField',
-            Label : 'invoiceNumber',
+            Label : '{i18n>invoiceNumber}',
             Value : invoiceNumber,
         },
         {
             $Type : 'UI.DataField',
-            Label : 'invoiceDate',
+            Label : '{i18n>invoiceDate}',
             Value : invoiceDate,
         },
         {
             $Type : 'UI.DataField',
             Value : description,
-            Label : 'description',
+            Label : '{i18n>description}',
         },
         {
             $Type : 'UI.DataField',
             Value : amount,
-            Label : 'amount',
+            Label : '{i18n>totalAmount}',
         },
         {
             $Type : 'UI.DataField',
-            Label : 'currency',
+            Label : '{i18n>currency}',
             Value : currency,
         },
     ]
@@ -57,27 +61,27 @@ annotate service.Headers with @(
         Data : [
             {
                 $Type : 'UI.DataField',
-                Label : 'dox_status',
+                Label : '{i18n>dox_status}',
                 Value : dox_status,
             },
             {
                 $Type : 'UI.DataField',
-                Label : 'invoiceNumber',
+                Label : '{invoiceNumber}',
                 Value : invoiceNumber,
             },
             {
                 $Type : 'UI.DataField',
-                Label : 'invoiceDate',
+                Label : '{i18n>invoiceDate}',
                 Value : invoiceDate,
             },
             {
                 $Type : 'UI.DataField',
-                Label : 'supplierNumber',
+                Label : '{i18n>supplierNumber}',
                 Value : supplierNumber,
             },
             {
                 $Type : 'UI.DataField',
-                Label : 'currency',
+                Label : '{i18n>currency}',
                 Value : currency,
             },
         ],
@@ -96,42 +100,47 @@ annotate service.Items with @(
         {
             $Type : 'UI.DataField',
             Value : flightNumber,
-            Label : 'flightNumber',
+            Label : '{i18n>flightNumber}',
         },
         {
             $Type : 'UI.DataField',
             Value : flightDate,
-            Label : 'flightDate',
+            Label : '{i18n>flightDate}',
         },
         {
             $Type : 'UI.DataField',
             Value : flightTime,
-            Label : 'flightTime',
+            Label : '{i18n>flightTime}',
         },
         {
             $Type : 'UI.DataField',
             Value : quantity,
-            Label : 'quantity',
+            Label : '{i18n>quantity}',
         },
         {
             $Type : 'UI.DataField',
             Value : amount,
-            Label : 'amount',
+            Label : '{i18n>amount}',
         },
         {
             $Type : 'UI.DataField',
-            Value : status,
-            Label : 'status',
+            Value : matchingStatus,
+            Label : '{i18n>matchingStatus}',
+        },
+        {
+            $Type : 'UI.DataField',
+            Value : workflowStatus,
+            Label : '{i18n>workflowStatus}',
         },
         {
             $Type : 'UI.DataField',
             Value : poNumber,
-            Label : 'poNumber',
+            Label : '{i18n>poNumber}',
         },
         {
             $Type : 'UI.DataField',
             Value : poLineNumber,
-            Label : 'poLineNumber',
+            Label : '{i18n>poLineNumber}',
         },]
 );
 annotate service.Headers with @(
@@ -149,28 +158,28 @@ annotate service.Headers with @(
             {
                 $Type : 'UI.DataField',
                 Value : supplierName,
-                Label : 'supplierName',
+                Label : '{i18n>supplierName}',
             },{
                 $Type : 'UI.DataField',
                 Value : invoiceNumber,
-                Label : 'invoiceNumber',
+                Label : '{i18n>invoiceNumber}',
             },{
                 $Type : 'UI.DataField',
                 Value : invoiceDate,
-                Label : 'invoiceDate',
+                Label : '{i18n>invoiceDate}',
             },
             {
                 $Type : 'UI.DataField',
                 Value : amount,
-                Label : 'amount',
+                Label : '{i18n>totalAmount}',
             },{
                 $Type : 'UI.DataField',
                 Value : currency,
-                Label : 'currency',
+                Label : '{i18n>currency}',
             },{
                 $Type : 'UI.DataField',
                 Value : description,
-                Label : 'description',
+                Label : '{i18n>description}',
             },],
     }
 );

@@ -1,0 +1,29 @@
+{
+  "xsappname": "Smart_Invoice_App",
+  "tenant-mode": "dedicated",
+  "scopes": [
+    {
+      "name": "uaa.user",
+      "description": "UAA"
+    }
+  ],
+  "attributes": [],
+  "role-templates": [
+    {
+      "name": "Token_Exchange",
+      "description": "UAA",
+      "scope-references": [
+        "uaa.user"
+      ]
+    }
+  ],
+  "oauth2-configuration": {
+    "redirect-uris": [
+      "http://localhost:4004/**",
+      "http://localhost:5000/**",
+      "http://localhost:5050/**",
+      "https://*.hana.ondemand.com/**",
+      "https://*.trial.applicationstudio.cloud.sap"
+    ]
+  }
+}
