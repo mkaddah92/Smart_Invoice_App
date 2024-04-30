@@ -40,14 +40,14 @@ sap.ui.define([
 			if (oFiles && oFiles.length > 0) {
 				const oFile = oFiles[0]
 				const reader = new FileReader()
-				// read the file
+				
 				reader.onload = function (e) {
-				const data = e.target.result
-				// reset file uploader path
-				fileUploader.clear()
-				this._uploadData(data)
-			}.bind(this)
-				reader.readAsBinaryString(oFile)
+					const data = e.target.result
+					// reset file uploader path
+					fileUploader.clear()
+					this._uploadData(data)
+				}.bind(this)
+					reader.readAsBinaryString(oFile)
 			}
 		},
 		onCreateInvoice: function(oEvent) {

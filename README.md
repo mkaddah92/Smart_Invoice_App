@@ -23,3 +23,11 @@ File or Folder | Purpose
 ## Learn More
 
 Learn more at https://cap.cloud.sap/docs/get-started/.
+
+cf create-service xsuaa application smt_inv_app-uaa -c xs-security.json
+cf create-service-key smt_inv_app-uaa smt_inv_app-uaa-key
+
+cf create-service destination lite smt_inv_app-dest
+cf create-service-key smt_inv_app-dest smt_inv_app-dest-key
+
+cds bind -2 smt_inv_app-dest smt_inv_app-uaa

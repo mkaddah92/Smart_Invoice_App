@@ -1,6 +1,7 @@
 {
   "version": "0.2.0",
   "configurations": [
+
     {
       "name": "Run Smart_Invoice_App",
       "runtimeExecutable": "cds",
@@ -18,6 +19,21 @@
       "env": {
         "run.config": "{\"handlerId\":\"lcap_run_config_handler_id\",\"runnableId\":\"{\\\"projectPath\\\":\\\"/home/user/projects/Smart_Invoice_App\\\",\\\"profileName\\\":\\\"\\\"}\"}"
       }
+    },
+    {
+      "name": "cds serve hybrid",
+      "request": "launch",
+      "type": "node",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "cds",
+      "args": [
+        "watch",
+        "--profile",
+        "hybrid"
+      ],
+      "skipFiles": [
+        "<node_internals>/**"
+      ]
     }
   ]
 }
