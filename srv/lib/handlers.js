@@ -38,20 +38,24 @@ async function createInvoice(req){
         console.log(`--- Creating new DOX job ---`);
         console.log(req);
         let data = req.data;
-        let rawBinaryData = data.file;
+        let b64Data = data.file;
         
-        // Assume 'rawBinaryData' contains the raw binary data of the PDF file
+        //The atob function will decode a base64-encoded string into a new string with a character for each byte of the binary data.
+        const byteCharacters = atob(b64Data);
 
-        // Step 1: Convert the raw binary data to a Uint8Array/*
-        const uint8Array = new Uint8Array(rawBinaryData.length);
-        for (let i = 0; i < rawBinaryData.length; i++) {
-            uint8Array[i] = rawBinaryData.charCodeAt(i);
+
+        //create an array of byte values by applying this using the .charCodeAt method for each character in the string.
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
         }
+        // convert this array of byte values into a real typed byte array by passing it to the Uint8Array constructor.
+        const byteArray = new Uint8Array(byteNumbers);
+        // This in turn can be converted to a Blob by wrapping it in an array and passing it to the Blob constructor.
+        const blob = new Blob([byteArray], {type: 'application/pdf'});
 
-        // Step 2: Create a Blob object using the Uint8Array data
-        const blob = new Blob([uint8Array], { type: 'application/pdf' });
-        
-        // Now 'blob' contains the PDF file in Blob format
+
+
         let documentName = "default-inovoice";       
         let fileName = documentName+'.pdf';
         
@@ -78,7 +82,7 @@ async function createInvoice(req){
             dox_status : oNewJobResponse.status
         });
         let exec = await sia.run(q1);
-
+        //*/
     }catch (error) {
         console.error(error);
       }
@@ -96,77 +100,68 @@ async function refreshJobs(req){
     //--------------------------------------------
     //call Dox service to fetch document extraction results 
     const doxService = await cds.connect.to('dox');
-    const doxJobsPath = "/document/jobs";
-    var request = require('request');
-    var options = {
-    'method': 'GET',
-    'url': 'https://aiservices-dox.cfapps.eu10.hana.ondemand.com/document-information-extraction/v1/document/jobs/'+jobId,
-    'headers': {
-        'Authorization': 'Bearer '+doxToken
-    },
-    formData: {
 
-    }
-    };
-    request(options, async function (error, response) {
-        if (error) throw new Error(error);
-        let result = JSON.parse(response.body);
-        let headerFields = result.extraction.headerFields;
-        console.log(headerFields);
-        let lineItems = result.extraction.lineItems;
-        //console.log(headerFields);
-        //console.log(result);
-       //--------------------------------------------
-       //Update header with the extracted information 
-        let q2 = UPDATE (Headers) .where ({ID:headerID}).with({
-            dox_status : 'Under Approval',
-            amount : headerFields[0].value,
-            currency : headerFields[1].value,
-            description : headerFields[2].value,
-            unitPrice :  headerFields[3].value,
-            unit : headerFields[4].value,
-            invoiceNumber : headerFields[5].value,
-            invoiceDate : headerFields[6].value,
-            supplierName : headerFields[7].value           
-        });
-        let exec = await sia.run(q2);
+    var oNewJobResponse = await doxService.send({
+        method: 'GET',
+        path: '/document/jobs/'+jobId,
+    });
+    console.log(oNewJobResponse);
+    let headerFields = oNewJobResponse.extraction.headerFields;
+    let lineItems = oNewJobResponse.extraction.lineItems;
+    //--------------------------------------------
+    //Update header with the extracted information 
+    let q2 = UPDATE (Headers) .where ({ID:headerID}).with({
+        dox_status : 'Under Approval',
+        amount : headerFields[0].value,
+        currency : headerFields[1].value,
+        description : headerFields[2].value,
+        unitPrice :  headerFields[3].value,
+        unit : headerFields[4].value,
+        invoiceNumber : headerFields[5].value,
+        invoiceDate : headerFields[6].value,
+        supplierName : headerFields[7].value           
+    });
+    let exec = await sia.run(q2);
+    //--------------------------------------------
+    //insert extracted lineitems into items entity
+    const { Items } = cds.entities
+    let insertArray = [];
+    let postArray = [];
+    let validateArray = [];
+    let matchingStatus = "";
+    let workflowStatus = "";
+    let poNumber = "";
+    let poLineNumber = "";
+    let SupplierNumber = "";
+    for(const lineItem of lineItems){
         //--------------------------------------------
-        //insert extracted lineitems into items entity
-        const { Items } = cds.entities
-        let insertArray = [];
-        let postArray = [];
-        let validateArray = [];
-        let matchingStatus = "";
-        let workflowStatus = "";
-        let poNumber = "";
-        let poLineNumber = "";
-        let SupplierNumber = "";
-        for(const lineItem of lineItems){
-            //--------------------------------------------
-             //Search purchaseOrders table for the PO number by the flight details
-            let findPoQuery = SELECT.from('purchaseOrders').where(
-                {flightNumber:lineItem[2].value, 
-                landingDate: lineItem[3].value,
-                landingTime:lineItem[4].value});
-            let exec3 = await sia.run(findPoQuery);
-            if(exec3.length != 0){
-                matchingStatus = "PO Found";
-                workflowStatus = "Pending Auto Posting";
-                poNumber = exec3[0].poNumber;
-                poLineNumber = exec3[0].poLineNumber;
-                SupplierNumber = exec3[0].supplierNumber;
-                postArray.push({
-                    quantity:Number(lineItem[1].value),
-                    amount:Number(lineItem[0].value),
-                    poNumber: poNumber,
-                    poLineNumber : poLineNumber,
-                    matchingStatus: matchingStatus,
-                    workflowStatus : workflowStatus,
-                    flightNumber: lineItem[2].value,
-                    flightDate: lineItem[3].value,
-                    flightTime:lineItem[4].value
-                });
+        //Search purchaseOrders table for the PO number by the flight details
+        let findPoQuery = SELECT.from('purchaseOrders').where({
+            flightNumber:lineItem[2].value, 
+            landingDate: lineItem[3].value,
+            landingTime:lineItem[4].value
+        });
+        let exec3 = await sia.run(findPoQuery);
+        if(exec3.length != 0){
+            //Add flignt line Item with status 'PO Found' to the array of items that is will be auto posted
+            matchingStatus = "PO Found";
+            workflowStatus = "Pending Auto Posting";
+            poNumber = exec3[0].poNumber;
+            poLineNumber = exec3[0].poLineNumber;
+            SupplierNumber = exec3[0].supplierNumber;
+            postArray.push({
+                quantity:Number(lineItem[1].value),
+                amount:Number(lineItem[0].value),
+                poNumber: poNumber,
+                poLineNumber : poLineNumber,
+                matchingStatus: matchingStatus,
+                workflowStatus : workflowStatus,
+                flightNumber: lineItem[2].value,
+                flightDate: lineItem[3].value,
+                flightTime:lineItem[4].value
+            });
             }else{
+                //Add flignt line Item with status 'PO Not Found' to the array of items that needs validating
                 matchingStatus = "PO Not Found";
                 workflowStatus = "Manual Verification";
                 poNumber = "";
@@ -183,7 +178,7 @@ async function refreshJobs(req){
                     flightTime:lineItem[4].value
                 });
             }
-            //Create insert array to push the information to the Items table with the PO in formation and lookup resutls
+            //Create insert array to push the flight line items to the local Items table with the PO in formation and lookup resutls
             insertArray.push({
                 header_ID: headerID,
                 flightNumber: lineItem[2].value,
@@ -197,63 +192,38 @@ async function refreshJobs(req){
                 poLineNumber : poLineNumber
             });
             
+    }
+    let q3 = INSERT.into (Items) .entries (insertArray);
+    let exec2 = await sia.run(q3);
+    //Update header with the matched supplier number from PurchaseOrders Table 
+    let q4 = UPDATE (Headers) .where ({dox_guid:jobId}).with({
+        supplierNumber : SupplierNumber
+    });
+    let exec4 = await sia.run(q4);
+    //-----------------------------------------------------------
+    //-----------------------------------------------------------
+    //Trigger the approval workflows in Build Process Automation
+    let autoPostWorkflowContent = {
+        "definitionId": "eu10.emea-south-sapbuild-cmte91cp.smartinvoiceprocess.invoicePostingApproval",
+        "context": {
+            "status": "Auto",
+            "invoiceheader": {
+                "totalAmount": Number(headerFields[0].value),
+                "currency": headerFields[1].value,
+                "description": headerFields[2].value,
+                "unitPrice" : headerFields[3].value,
+                "unit" : headerFields[4].value,
+                "invoiceNumber": headerFields[5].value,
+                "invoiceDate": headerFields[6].value,
+                "supplierName": headerFields[7].value,
+                "supplierNumber": SupplierNumber,
+                
+            },
+            "invoiceitems": postArray
         }
-       
-        let q3 = INSERT.into (Items) .entries (insertArray);
-        let exec2 = await sia.run(q3);
-
-        //Update header with the matched supplier number from PurchaseOrders Table 
-        let q4 = UPDATE (Headers) .where ({dox_guid:jobId}).with({
-            supplierNumber : SupplierNumber
-        });
-        let exec4 = await sia.run(q4);
-        
-        //Triggering the workflow for the extracted items that would be auto posted
-        var request = require('request');
-        var options = {
-        'method': 'POST',
-        'url': 'https://spa-api-gateway-bpi-eu-prod.cfapps.eu10.hana.ondemand.com/workflow/rest/v1/workflow-instances',
-        'headers': {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer '+sbpaToken
-        },
-        body: JSON.stringify({
-            "definitionId": "eu10.emea-south-sapbuild-cmte91cp.smartinvoiceprocess.invoicePostingApproval",
-            "context": {
-                "status": "Auto",
-                "invoiceheader": {
-                    "totalAmount": Number(headerFields[0].value),
-                    "currency": headerFields[1].value,
-                    "description": headerFields[2].value,
-                    "unitPrice" : headerFields[3].value,
-                    "unit" : headerFields[4].value,
-                    "invoiceNumber": headerFields[5].value,
-                    "invoiceDate": headerFields[6].value,
-                    "supplierName": headerFields[7].value,
-                    "supplierNumber": SupplierNumber,
-                    
-                },
-                "invoiceitems": postArray
-            }
-        })
-        
-        };
-        request(options, function (error, response) {
-        if (error) throw new Error(error);
-            console.log(response.body);
-        });
-        //-----------------------------------------------------------------
-        //Triggering the workflow for the extracted items that would requires verification
-        var request = require('request');
-        var options = {
-        'method': 'POST',
-        'url': 'https://spa-api-gateway-bpi-eu-prod.cfapps.eu10.hana.ondemand.com/workflow/rest/v1/workflow-instances',
-        'headers': {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer '+sbpaToken
-        },
-        body: JSON.stringify({
-            "definitionId": "eu10.emea-south-sapbuild-cmte91cp.smartinvoiceprocess.invoicePostingApproval",
+    };
+    let validateWorkflowContent  = {
+        "definitionId": "eu10.emea-south-sapbuild-cmte91cp.smartinvoiceprocess.invoicePostingApproval",
             "context": {
                 "status": "Manual",
                 "invoiceheader": {
@@ -269,17 +239,11 @@ async function refreshJobs(req){
                 },
                 "invoiceitems": validateArray
             }
-        })
-        
-        };
-        request(options, function (error, response) {
-        if (error) throw new Error(error);
-            console.log(response.body);
-        });
-        //*/
-       
-        
-    });
+    }
+
+    const SBPA_API = await cds.connect.to('spa_api');
+    const result1 = await SBPA_API.send('POST', '/workflow/rest/v1/workflow-instances', JSON.stringify(autoPostWorkflowContent), { "Content-Type": "application/json" });
+    const result2= await SBPA_API.send('POST', '/workflow/rest/v1/workflow-instances', JSON.stringify(validateWorkflowContent), { "Content-Type": "application/json" });
 
    
     

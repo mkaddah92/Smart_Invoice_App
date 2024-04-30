@@ -1,7 +1,6 @@
 {
   "version": "0.2.0",
   "configurations": [
-
     {
       "name": "Run Smart_Invoice_App",
       "runtimeExecutable": "cds",

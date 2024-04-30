@@ -17,7 +17,7 @@ sap.ui.define([
 			let sActionName = "Smart_Invoice_AppService.EntityContainer/createInvoice";
 			let mParameters = {
 				parameterValues: [
-					{ name: "file", value: JSON.stringify(payload) }
+					{ name: "file", value: btoa(payload) }
 				],
 				context: editFlow.getView().getBindingContext(),
 				model: editFlow.getView().getModel(),

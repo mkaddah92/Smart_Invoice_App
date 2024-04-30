@@ -7,29 +7,29 @@ service Smart_Invoice_AppService
         projection on my.Headers
         actions
         {
-            @(
-                cds.odata.bindingparameter.name  : '_it',
-                Common.SideEffects              : {
-                    TargetEntities: [
-                        _it
-                    ],
-                    SourceEntities: [
-                        _it
-                    ]
-                }
-            )
+            @cds.odata.bindingparameter.name : '_it'
+            @Common.SideEffects : 
+            {
+                SourceEntities :
+                [
+                    _it
+                ],
+                TargetEntities :
+                [
+                    _it
+                ]
+            }
             action refreshJob
             (
             );
-            
         };
 
     entity Items as
-        projection on my.Items
+        projection on my.Items;
 
     action createInvoice
     (
-        file : String
+        file : LargeBinary
     )
     returns String;
 
