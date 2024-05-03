@@ -33,4 +33,10 @@ http://localhost:4004/Smart_Invoice_App.SmartInvoiceApp/webapp/index.html
 
 1. Active NodeJS LTS (Long Term Support) version and associated supported NPM version.  (See https://nodejs.org)
 
+#### login to UAECF subaccount 
+cf login https://api.cf.eu10.hana.ondemand.com
+
+#### bind to xsuaa and destination services in uaecf
+cds bind -2 smt_inv_app-dest,smt_inv_app-uaa
+
 

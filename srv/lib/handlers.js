@@ -1,8 +1,6 @@
 const cds = require('@sap/cds');
 const b64ToBlob = require('b64-to-blob');
 
-let sbpaToken = "eyJhbGciOiJSUzI1NiIsImprdSI6Imh0dHBzOi8vZW1lYS1zb3V0aC1zYXBidWlsZC1jbXRlOTFjcC5hdXRoZW50aWNhdGlvbi5ldTEwLmhhbmEub25kZW1hbmQuY29tL3Rva2VuX2tleXMiLCJraWQiOiJkZWZhdWx0LWp3dC1rZXktMTEyMjgwNzczMSIsInR5cCI6IkpXVCIsImppZCI6ICJRUHBDNHhsdEdUaVJGNnhEZjd6UXJwQ1lnMDcyZUJSZDQvQ1dmcE1oRm9jPSJ9.eyJqdGkiOiI0NzE5YWY0YTVmZGE0MGRmOWE3YmNiNzg4MWE0ZDM0NyIsImV4dF9hdHRyIjp7ImVuaGFuY2VyIjoiWFNVQUEiLCJzdWJhY2NvdW50aWQiOiI5ZDBhNDFjZS1mMzM5LTRiN2YtYmM0OC1mZDQwYjczYzdhNmYiLCJ6ZG4iOiJlbWVhLXNvdXRoLXNhcGJ1aWxkLWNtdGU5MWNwIiwic2VydmljZWluc3RhbmNlaWQiOiJjMDdlY2I1ZC1iNjZjLTRlNDgtYmViMy04ZDUxMWM2MzhmZmMifSwic3ViIjoic2ItYzA3ZWNiNWQtYjY2Yy00ZTQ4LWJlYjMtOGQ1MTFjNjM4ZmZjIWIxNjkwNjB8eHN1YWEhYjEyMDI0OSIsImF1dGhvcml0aWVzIjpbInVhYS5yZXNvdXJjZSJdLCJzY29wZSI6WyJ1YWEucmVzb3VyY2UiXSwiY2xpZW50X2lkIjoic2ItYzA3ZWNiNWQtYjY2Yy00ZTQ4LWJlYjMtOGQ1MTFjNjM4ZmZjIWIxNjkwNjB8eHN1YWEhYjEyMDI0OSIsImNpZCI6InNiLWMwN2VjYjVkLWI2NmMtNGU0OC1iZWIzLThkNTExYzYzOGZmYyFiMTY5MDYwfHhzdWFhIWIxMjAyNDkiLCJhenAiOiJzYi1jMDdlY2I1ZC1iNjZjLTRlNDgtYmViMy04ZDUxMWM2MzhmZmMhYjE2OTA2MHx4c3VhYSFiMTIwMjQ5IiwiZ3JhbnRfdHlwZSI6ImNsaWVudF9jcmVkZW50aWFscyIsInJldl9zaWciOiJhZjE3MGFlIiwiaWF0IjoxNzE0MTE5Mjc3LCJleHAiOjE3MTQxNjI0NzcsImlzcyI6Imh0dHBzOi8vZW1lYS1zb3V0aC1zYXBidWlsZC1jbXRlOTFjcC5hdXRoZW50aWNhdGlvbi5ldTEwLmhhbmEub25kZW1hbmQuY29tL29hdXRoL3Rva2VuIiwiemlkIjoiOWQwYTQxY2UtZjMzOS00YjdmLWJjNDgtZmQ0MGI3M2M3YTZmIiwiYXVkIjpbInVhYSIsInNiLWMwN2VjYjVkLWI2NmMtNGU0OC1iZWIzLThkNTExYzYzOGZmYyFiMTY5MDYwfHhzdWFhIWIxMjAyNDkiXX0.SknQ3gBl7-KJcfwBNTCx9mVN0eHoc5YVpEk0DTc03WdWwJMB9KSDksCOGpc71MLN3j-XZL1LZIttnLf8GvUdr46hyJbIvIUSyCHEa5W0iaueyh7G44hKGHYw0upryPnVZFS4hwLqxx1Cz_jHloDEAnfN1qLus2z3Le4SZ8Ok-pEtfYfn_zqxiI_Xi1WPIYC3m3It-Uv67ATcGRxB49pdSBmYI5mXWFW39QGiX7MRyqaIyofLu_unHBUskmdLdZoqkgv2TV5Atauc_wiJrNCpoze9TWycGMYlv894gbaiojUiruLadgLbhnpxoZayXlH_k7H0O2CIt3_hw5nETC7-ug";
-
 function _detectMimeType(b64) {
     const signatures = {
         JVBERi0: "application/pdf",
@@ -36,7 +34,7 @@ async function createInvoice(req){
     try {
 
         console.log(`--- Creating new DOX job ---`);
-        console.log(req);
+        
         let data = req.data;
         let b64Data = data.file;
         
@@ -71,7 +69,7 @@ async function createInvoice(req){
        
         var oNewJobResponse = await doxService.send({
             method: 'POST',
-            path: `/document/jobs`,
+            path: `/document-information-extraction/v1/document/jobs`,
             data: formData,
             headers: headers
         });
@@ -103,9 +101,9 @@ async function refreshJobs(req){
 
     var oNewJobResponse = await doxService.send({
         method: 'GET',
-        path: '/document/jobs/'+jobId,
+        path: '/document-information-extraction/v1/document/jobs/'+jobId,
     });
-    console.log(oNewJobResponse);
+    
     let headerFields = oNewJobResponse.extraction.headerFields;
     let lineItems = oNewJobResponse.extraction.lineItems;
     //--------------------------------------------
