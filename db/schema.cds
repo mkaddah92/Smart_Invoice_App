@@ -49,7 +49,7 @@ entity PurchaseOrders : cuid
     supplierNumber : String(100);
     poNumber : String(100);
     poLineNumber : String(100);
-    flightNumber: String(5);
+    flightNumber: String;
     departureDate : Date;
     departureTime : Time;
     landingDate : Date;
