@@ -1,5 +1,5 @@
 {
-  "version": "1.25.0",
+  "version": "2.0.0",
   "tasks": [
     {
       "label": "npm-install",
@@ -56,6 +56,21 @@
       "label": "Enable Discovery and Deploy Smart_Invoice_App",
       "taskType": "Deploy",
       "enableDiscovery": "true"
+    },
+    {
+      "label": "dev-project",
+      "type": "process",
+      "command": "npx",
+      "args": [
+        "dev-cap-tools",
+        "gen-entrypoint"
+      ],
+      "dependsOn": [
+        "BuildMDK"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      }
     }
   ]
 }

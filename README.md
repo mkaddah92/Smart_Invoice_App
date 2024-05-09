@@ -36,3 +36,17 @@ cf create-service-key smt_inv_app-dest smt_inv_app-dest-key
 
 cds bind -2 smt_inv_app-dest,smt_inv_app-uaa
 cds bind -2 Smart_Invoice_App-auth,Smart_Invoice_App-destination
+
+
+#### login to UAECF subaccount 
+cf api https://api.cf.eu10.hana.ondemand.com
+cf login 
+
+cf create-service xsuaa application smt_inv_app-uaa -c xs-security.json
+cf create-service-key smt_inv_app-uaa smt_inv_app-uaa-key
+
+cf create-service destination lite smt_inv_app-dest
+cf create-service-key smt_inv_app-dest smt_inv_app-dest-key
+
+cds bind -2 smt_inv_app-dest,smt_inv_app-uaa
+cds bind -2 Smart_Invoice_App-auth,Smart_Invoice_App-destination
