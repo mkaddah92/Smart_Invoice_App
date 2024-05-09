@@ -35,7 +35,6 @@
   },
   "cds": {
     "requires": {
-      "db": "hana",
       "[production]": {
         "db": "hana"
       },
