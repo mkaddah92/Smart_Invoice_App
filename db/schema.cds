@@ -2,14 +2,7 @@ namespace sia;
 
 using
 {
-    Country,
-    Currency,
-    Language,
-    User,
-    cuid,
-    extensible,
-    managed,
-    temporal
+    cuid
 }
 from '@sap/cds/common';
 
