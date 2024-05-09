@@ -51,7 +51,7 @@
       "dox": {
         "kind": "rest",
         "credentials": {
-          "destination": "sap_dox",
+          "destination": "sap_dox_premium",
           "requestTimeout": 1000000
         }
       },
